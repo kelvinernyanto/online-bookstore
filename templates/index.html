@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The Reading Room | Online Bookstore</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        .collection-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .catalog-toolbar {
+            flex-wrap: wrap;
+        }
+
+        .catalog-label {
+            overflow-wrap: anywhere;
+        }
+
+        .book-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .book-action-link {
+            flex: 1 1 90px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 11px 12px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            color: var(--ink);
+            font-size: 12px;
+            text-align: center;
+            transition:
+                background-color 180ms ease,
+                color 180ms ease;
+        }
+
+        .edit-price-link:hover {
+            background: var(--navy);
+            color: var(--cream);
+        }
+
+        .delete-book-link {
+            border-color: #ead5d0;
+            color: #803d35;
+        }
+
+        .delete-book-link:hover {
+            background: #fbefec;
+        }
+
+        .search-controls label {
+            margin: 0;
+        }
+
+        .search-controls select {
+            max-width: 100%;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            background: var(--paper);
+            color: var(--ink);
+            font: inherit;
+        }
+
+        .search-controls select:focus-visible {
+            outline: 2px solid #847144;
+            outline-offset: 3px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .book-action-link {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('home') }}">
+                <span class="brand-icon" aria-hidden="true">R.</span>
+
+                <span class="brand-name">
+                    THE READING ROOM
+                    <small>AN ONLINE BOOKSTORE</small>
+                </span>
+            </a>
+
+            <a class="header-link" href="#collection">
+                Explore the collection
+                <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-glow" aria-hidden="true"></div>
+
+            <div class="container hero-layout">
+                <div class="hero-copy">
+                    <p class="eyebrow">
+                        A SMALL COLLECTION. ENDLESS POSSIBILITIES.
+                    </p>
+
+                    <h1>
+                        Your next chapter<br>
+                        begins <em>here.</em>
+                    </h1>
+
+                    <p class="hero-description">
+                        Through mysterious streets and extraordinary worlds,
+                        discover stories that stay with you long after
+                        the final page.
+                    </p>
+
+                    <a class="button-primary" href="#collection">
+                        Discover the books
+                        <span aria-hidden="true">↗</span>
+                    </a>
+
+                    <div class="hero-details">
+                        <span>Timeless classics</span>
+                        <span>Extraordinary adventures</span>
+                    </div>
+                </div>
+
+                <div class="hero-art" aria-hidden="true">
+                    <div class="art-orbit orbit-one"></div>
+                    <div class="art-orbit orbit-two"></div>
+
+                    <span class="art-star star-one">✦</span>
+                    <span class="art-star star-two">✧</span>
+
+                    <div class="decor-book book-back">
+                        <span class="decor-book-label">
+                            J. R. R. TOLKIEN
+                        </span>
+
+                        <span class="decor-book-title">
+                            The<br>Hobbit
+                        </span>
+
+                        <span class="decor-book-symbol">◇</span>
+
+                        <span class="decor-book-bottom">
+                            AN UNEXPECTED JOURNEY
+                        </span>
+                    </div>
+
+                    <div class="decor-book book-front">
+                        <span class="decor-book-label">
+                            BRAM STOKER
+                        </span>
+
+                        <span class="decor-book-title">Dracula</span>
+
+                        <div class="moon-art">
+                            <span class="moon"></span>
+                            <span class="moon-line"></span>
+                        </div>
+
+                        <span class="decor-book-bottom">
+                            A GOTHIC CLASSIC · 1897
+                        </span>
+                    </div>
+
+                    <div class="art-caption">
+                        <span class="caption-line"></span>
+                        Stories beyond the ordinary
+                    </div>
+                </div>
+            </div>
+
+            <div class="container hero-bottom">
+                <span>FOR THE CURIOUS MIND</span>
+                <span>TURN A PAGE. FIND A WORLD.</span>
+                <span class="hero-bottom-arrow" aria-hidden="true">↓</span>
+            </div>
+        </section>
+
+        <section
+            class="collection-section"
+            id="collection"
+            aria-labelledby="collection-heading"
+        >
+            <div class="container">
+                <div class="collection-heading">
+                    <div>
+                        <p class="eyebrow eyebrow-dark">
+                            THE BOOKSHELF
+                        </p>
+
+                        <h2 id="collection-heading">
+                            Remarkable stories.<br>
+                            <em>Ready to be discovered.</em>
+                        </h2>
+                    </div>
+
+                    <p class="collection-description">
+                        A collection of gothic tales, brilliant mysteries,
+                        and unforgettable fantasy.
+                        Choose where your imagination travels next.
+                    </p>
+                </div>
+
+                <!-- Open the add-book form -->
+                <div class="collection-actions">
+                    <a
+                        class="button-primary"
+                        href="{{ url_for('add_book') }}"
+                    >
+                        Add book
+                        <span aria-hidden="true">＋</span>
+                    </a>
+                </div>
+
+                <!-- Search and author filter -->
+                <form
+                    action="{{ url_for('home', _anchor='collection') }}"
+                    method="get"
+                    class="search-form"
+                    role="search"
+                >
+                    <label for="search">Search by title</label>
+
+                    <div class="search-controls">
+                        <input
+                            id="search"
+                            type="search"
+                            name="q"
+                            value="{{ search_query|default('') }}"
+                            placeholder="Try Dracula or The Hobbit..."
+                        >
+
+                        <label for="author-filter">Author</label>
+
+                        <select id="author-filter" name="author_id">
+                            <option value="">All authors</option>
+
+                            {% for author_id, author_name in authors %}
+                            <option
+                                value="{{ author_id }}"
+                                {% if author_id == selected_author_id %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ author_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit">Search</button>
+
+                        <a href="{{ url_for('home', _anchor='collection') }}">
+                            Reset
+                        </a>
+                    </div>
+                </form>
+
+                <!-- Catalog heading -->
+                <div class="catalog-toolbar">
+                    <div class="catalog-label">
+                        <span
+                            class="status-dot"
+                            aria-hidden="true"
+                        ></span>
+
+                        {% if search_query %}
+                            Results for “{{ search_query }}”
+                        {% elif selected_author_id %}
+                            Books by selected author
+                        {% else %}
+                            Book catalog
+                        {% endif %}
+                    </div>
+
+                    <span class="book-count">
+                        {{ books|length }}
+                        {{ 'title' if books|length == 1 else 'titles' }}
+                    </span>
+                </div>
+
+                <!-- Book cards -->
+                <div class="book-grid">
+                    {% for book_id, title, price in books %}
+                    <article class="book-card">
+                        <div class="book-cover cover-{{ (book_id - 1) % 5 }}">
+                            <span class="cover-series">
+                                THE READING ROOM
+                            </span>
+
+                            <div class="cover-border">
+                                <span
+                                    class="cover-ornament"
+                                    aria-hidden="true"
+                                >
+                                    ✦
+                                </span>
+
+                                <h3>{{ title }}</h3>
+
+                                <span
+                                    class="cover-rule"
+                                    aria-hidden="true"
+                                ></span>
+
+                                <span class="cover-caption">
+                                    A WORLD WITHIN THE PAGES
+                                </span>
+                            </div>
+
+                            <span class="cover-number">
+                                VOL. {{ "%02d"|format(book_id) }}
+                            </span>
+                        </div>
+
+                        <div class="book-information">
+                            <span class="book-index">
+                                THE COLLECTION /
+                                {{ "%02d"|format(book_id) }}
+                            </span>
+
+                            <h4>{{ title }}</h4>
+
+                            <div class="book-price">
+                                <span class="price-label">Price</span>
+
+                                <span class="price-value">
+                                    <small>USD</small>
+                                    {{ "%.2f"|format(price) }}
+                                </span>
+                            </div>
+
+                            <div class="book-actions">
+                                <a
+                                    class="book-action-link edit-price-link"
+                                    href="{{ url_for('edit_price', book_id=book_id) }}"
+                                    aria-label="Edit price for {{ title }}"
+                                >
+                                    Edit price
+                                </a>
+
+                                <a
+                                    class="book-action-link delete-book-link"
+                                    href="{{ url_for('delete_book', book_id=book_id) }}"
+                                    aria-label="Review deletion of {{ title }}"
+                                >
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+
+                    {% else %}
+                    <div class="empty-state">
+                        <span aria-hidden="true">✦</span>
+
+                        {% if search_query or selected_author_id %}
+                            <h3>No books found.</h3>
+
+                            <p>
+                                No books matched your search.
+                                Try another title, choose a different author,
+                                or reset the filters.
+                            </p>
+
+                            <a
+                                class="closing-link"
+                                href="{{ url_for('home', _anchor='collection') }}"
+                            >
+                                Show all books
+                                <span aria-hidden="true">↗</span>
+                            </a>
+                        {% else %}
+                            <h3>A new chapter is on its way.</h3>
+
+                            <p>
+                                There are no books in the collection yet.
+                                Add a book to start your collection.
+                            </p>
+
+                            <a
+                                class="closing-link"
+                                href="{{ url_for('add_book') }}"
+                            >
+                                Add your first book
+                                <span aria-hidden="true">↗</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <p class="catalog-note">
+                    All prices are shown in US dollars.
+                    Book cover artwork is illustrative.
+                </p>
+            </div>
+        </section>
+
+        <section class="closing-section">
+            <div class="container closing-inner">
+                <span class="closing-star" aria-hidden="true">✦</span>
+
+                <p>
+                    Between the first page and the last,<br>
+                    <em>there is a world waiting for you.</em>
+                </p>
+
+                <a href="#collection" class="closing-link">
+                    Find your next read
+                    <span aria-hidden="true">↑</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <a class="footer-brand" href="{{ url_for('home') }}">
+                THE READING ROOM<span>.</span>
+            </a>
+
+            <p>Classic stories. Lasting impressions.</p>
+
+            <a href="#collection">Browse collection ↗</a>
+        </div>
+    </footer>
+</body>
+</html>

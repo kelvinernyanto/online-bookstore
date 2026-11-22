@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Price | The Reading Room</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        .edit-section {
+            min-height: 70vh;
+            padding-block: 64px;
+        }
+
+        .edit-card {
+            max-width: 600px;
+            margin-inline: auto;
+            padding: clamp(24px, 5vw, 48px);
+            border: 1px solid var(--line);
+            background: var(--paper);
+            box-shadow: 0 18px 45px rgb(20 37 34 / 6%);
+        }
+
+        .edit-card h1 {
+            margin: 0 0 16px;
+            font-family: var(--serif);
+            font-size: clamp(30px, 5vw, 42px);
+            font-weight: 400;
+        }
+
+        .edit-description {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .edit-form {
+            margin-top: 32px;
+        }
+
+        .edit-form label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .edit-form input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            background: white;
+            color: var(--ink);
+            font: inherit;
+        }
+
+        .edit-form input:focus-visible {
+            outline: 2px solid #847144;
+            outline-offset: 3px;
+        }
+
+        .field-help {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .edit-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px;
+            margin-top: 28px;
+        }
+
+        .edit-actions button {
+            border: 0;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .edit-actions button:focus-visible {
+            outline: 3px solid #847144;
+            outline-offset: 4px;
+        }
+
+        .cancel-link {
+            font-size: 13px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('home') }}">
+                <span class="brand-icon" aria-hidden="true">R.</span>
+
+                <span class="brand-name">
+                    THE READING ROOM
+                    <small>AN ONLINE BOOKSTORE</small>
+                </span>
+            </a>
+
+            <a
+                class="header-link"
+                href="{{ url_for('home', _anchor='collection') }}"
+            >
+                Back to collection
+                <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container edit-section">
+        <section class="edit-card" aria-labelledby="edit-heading">
+            <p class="eyebrow eyebrow-dark">MANAGE YOUR COLLECTION</p>
+
+            <h1 id="edit-heading">Edit book price</h1>
+
+            <p class="edit-description">
+                Update the selling price for
+                <strong>{{ book[1] }}</strong>.
+            </p>
+
+            <form
+                class="edit-form"
+                action="{{ url_for('edit_price', book_id=book[0]) }}"
+                method="post"
+            >
+                <label for="price">New price (USD)</label>
+
+                <input
+                    id="price"
+                    name="price_usd"
+                    type="number"
+                    min="0"
+                    max="9999999999.99"
+                    step="0.01"
+                    value="{{ book[2] }}"
+                    aria-describedby="price-help"
+                    required
+                >
+
+                <p class="field-help" id="price-help">
+                    Enter a non-negative amount with up to two decimal places.
+                </p>
+
+                <div class="edit-actions">
+                    <button type="submit" class="button-primary">
+                        Save price
+                        <span aria-hidden="true">↗</span>
+                    </button>
+
+                    <a
+                        class="cancel-link"
+                        href="{{ url_for('home', _anchor='collection') }}"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

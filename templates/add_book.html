@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add a Book | The Reading Room</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        .add-section {
+            padding-block: 60px;
+        }
+
+        .add-card {
+            max-width: 760px;
+            margin-inline: auto;
+            padding: clamp(24px, 5vw, 48px);
+            border: 1px solid var(--line);
+            background: var(--paper);
+            box-shadow: 0 18px 45px rgb(20 37 34 / 6%);
+        }
+
+        .add-card h1 {
+            margin: 0 0 16px;
+            font-family: var(--serif);
+            font-size: clamp(32px, 5vw, 44px);
+            font-weight: 400;
+        }
+
+        .form-introduction {
+            margin-bottom: 32px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .field {
+            min-width: 0;
+        }
+
+        .field-full {
+            grid-column: 1 / -1;
+        }
+
+        .field label,
+        .author-fieldset legend {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--ink);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            min-height: 48px;
+            padding: 13px 14px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            background: white;
+            color: var(--ink);
+            font: inherit;
+        }
+
+        .field input:focus-visible,
+        .field select:focus-visible,
+        .author-option input:focus-visible {
+            outline: 2px solid #847144;
+            outline-offset: 3px;
+        }
+
+        .field-help {
+            margin: 9px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .author-fieldset {
+            min-width: 0;
+            margin: 30px 0 0;
+            padding: 0;
+            border: 0;
+        }
+
+        .author-options {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .author-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            background: white;
+            font-size: 13px;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .author-option:has(input:checked) {
+            border-color: #847144;
+            background: #f2eee3;
+        }
+
+        .author-option input {
+            flex-shrink: 0;
+            width: 17px;
+            height: 17px;
+            margin: 0;
+            accent-color: var(--navy);
+        }
+
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px;
+            margin-top: 34px;
+            padding-top: 26px;
+            border-top: 1px solid var(--line);
+        }
+
+        .form-actions button {
+            border: 0;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .form-actions button:focus-visible {
+            outline: 3px solid #847144;
+            outline-offset: 4px;
+        }
+
+        .cancel-link {
+            font-size: 13px;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 560px) {
+            .form-grid,
+            .author-options {
+                grid-template-columns: 1fr;
+            }
+
+            .add-section {
+                padding-block: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('home') }}">
+                <span class="brand-icon" aria-hidden="true">R.</span>
+
+                <span class="brand-name">
+                    THE READING ROOM
+                    <small>AN ONLINE BOOKSTORE</small>
+                </span>
+            </a>
+
+            <a
+                class="header-link"
+                href="{{ url_for('home', _anchor='collection') }}"
+            >
+                Back to collection
+                <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container add-section">
+        <section class="add-card" aria-labelledby="add-heading">
+            <p class="eyebrow eyebrow-dark">
+                GROW YOUR COLLECTION
+            </p>
+
+            <h1 id="add-heading">A new story on the shelf.</h1>
+
+            <p class="form-introduction">
+                Add a book, set its price, and choose its provider
+                and authors. Fields marked * are required.
+            </p>
+
+            <form action="{{ url_for('add_book') }}" method="post">
+                <div class="form-grid">
+                    <div class="field field-full">
+                        <label for="title">Book title *</label>
+
+                        <input
+                            id="title"
+                            name="title"
+                            type="text"
+                            maxlength="150"
+                            placeholder="Enter the book title"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="publication-year">
+                            Publication year
+                        </label>
+
+                        <input
+                            id="publication-year"
+                            name="publication_year"
+                            type="number"
+                            min="1"
+                            max="9999"
+                            step="1"
+                            placeholder="For example, 1897"
+                            aria-describedby="year-help"
+                        >
+
+                        <p class="field-help" id="year-help">
+                            The year the work was first published.
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="genre">Genre</label>
+
+                        <input
+                            id="genre"
+                            name="genre"
+                            type="text"
+                            maxlength="150"
+                            placeholder="For example, Fantasy"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="price">Price (USD) *</label>
+
+                        <input
+                            id="price"
+                            name="price_usd"
+                            type="number"
+                            min="0"
+                            max="9999999999.99"
+                            step="0.01"
+                            placeholder="For example, 15.99"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="provider">Provider *</label>
+
+                        <select
+                            id="provider"
+                            name="provider_id"
+                            required
+                        >
+                            <option value="">Choose a provider</option>
+
+                            {% for provider_id, provider_name in providers %}
+                            <option value="{{ provider_id }}">
+                                {{ provider_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <fieldset
+                    class="author-fieldset"
+                    aria-describedby="authors-help"
+                >
+                    <legend>Authors *</legend>
+
+                    <p class="field-help" id="authors-help">
+                        Choose at least one author.
+                        You can select more than one.
+                    </p>
+
+                    <div class="author-options">
+                        {% for author_id, author_name in authors %}
+                        <label class="author-option">
+                            <input
+                                type="checkbox"
+                                name="author_ids"
+                                value="{{ author_id }}"
+                            >
+                            <span>{{ author_name }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" class="button-primary">
+                        Add book
+                        <span aria-hidden="true">↗</span>
+                    </button>
+
+                    <a
+                        class="cancel-link"
+                        href="{{ url_for('home', _anchor='collection') }}"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

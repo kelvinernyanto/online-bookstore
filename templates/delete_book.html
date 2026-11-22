@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Book | The Reading Room</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+        .delete-section {
+            min-height: 70vh;
+            padding-block: 64px;
+        }
+
+        .delete-card {
+            max-width: 600px;
+            margin-inline: auto;
+            padding: clamp(24px, 5vw, 48px);
+            border: 1px solid var(--line);
+            background: var(--paper);
+            box-shadow: 0 18px 45px rgb(20 37 34 / 6%);
+        }
+
+        .delete-card h1 {
+            margin: 0 0 20px;
+            font-family: var(--serif);
+            font-size: clamp(30px, 5vw, 42px);
+            font-weight: 400;
+        }
+
+        .delete-description {
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .book-summary {
+            margin-block: 28px;
+            padding: 22px;
+            border-left: 3px solid var(--gold);
+            background: var(--cream);
+        }
+
+        .book-summary small {
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 1.5px;
+        }
+
+        .book-summary h2 {
+            margin: 10px 0 0;
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 400;
+            overflow-wrap: anywhere;
+        }
+
+        .delete-warning {
+            padding: 16px;
+            border: 1px solid #ead5d0;
+            border-radius: 3px;
+            background: #fbefec;
+            color: #803d35;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .delete-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 24px;
+            margin-top: 28px;
+        }
+
+        .delete-button {
+            padding: 15px 24px;
+            border: 0;
+            border-radius: 3px;
+            background: #803d35;
+            color: white;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background: #622b25;
+        }
+
+        .delete-button:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 4px;
+        }
+
+        .cancel-link {
+            font-size: 13px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="{{ url_for('home') }}">
+                <span class="brand-icon" aria-hidden="true">R.</span>
+
+                <span class="brand-name">
+                    THE READING ROOM
+                    <small>AN ONLINE BOOKSTORE</small>
+                </span>
+            </a>
+
+            <a
+                class="header-link"
+                href="{{ url_for('home', _anchor='collection') }}"
+            >
+                Back to collection
+                <span aria-hidden="true">↗</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container delete-section">
+        <section class="delete-card" aria-labelledby="delete-heading">
+            <p class="eyebrow eyebrow-dark">
+                MANAGE YOUR COLLECTION
+            </p>
+
+            <h1 id="delete-heading">Remove this book?</h1>
+
+            <p class="delete-description">
+                Please review the book below before confirming.
+            </p>
+
+            <div class="book-summary">
+                <small>SELECTED BOOK</small>
+                <h2>{{ book[1] }}</h2>
+            </div>
+
+            <p class="delete-warning">
+                This will permanently remove the book from the catalog.
+                This action cannot be undone through this application.
+            </p>
+
+            <form
+                action="{{ url_for('delete_book', book_id=book[0]) }}"
+                method="post"
+            >
+                <div class="delete-actions">
+                    <button type="submit" class="delete-button">
+                        Delete book
+                    </button>
+
+                    <a
+                        class="cancel-link"
+                        href="{{ url_for('home', _anchor='collection') }}"
+                    >
+                        Cancel, keep this book
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
